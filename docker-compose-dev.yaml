@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+  isatex_app:
+    image: maven:3.8.6-eclipse-temurin-11
+    working_dir: /usr/src/application
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/usr/src/application
+      - mvn_local_repo:/root/.m2
+    entrypoint: "mvn spring-boot:run"
+    networks:
+      - redis_network
+      - db_network
+    depends_on:
+      - isatex_mariadb
+      - isatex_redis
+  isatex_mariadb:
+    image: mariadb:10.9.3-jammy
+    hostname: mariadb_container
+    ports:
+      - "3307:3306"
+    environment:
+      - MARIADB_USER=app
+      - MARIADB_PASSWORD=app
+      - MARIADB_ROOT_PASSWORD=root
+      - MARIADB_DATABASE=app_db
+    networks:
+      - db_network
+  isatex_redis:
+    image: redis:6.2.7-bullseye
+    hostname: redis_container
+    networks:
+      - redis_network
+    volumes:
+      - redis_dump:/etc/
+volumes:
+  db_data:
+  mvn_local_repo:
+  redis_dump:
+  app_logs:
+networks:
+  db_network:
+  redis_network:
