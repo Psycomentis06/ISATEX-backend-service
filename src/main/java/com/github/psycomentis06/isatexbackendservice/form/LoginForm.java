@@ -1,4 +1,4 @@
-package com.github.psycomentis06.isatexbackendservice.filter;
+package com.github.psycomentis06.isatexbackendservice.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
