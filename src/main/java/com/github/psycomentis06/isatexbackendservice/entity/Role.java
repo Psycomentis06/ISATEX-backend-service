@@ -22,13 +22,13 @@ public class Role {
 
     private String name;
 
-    public static String ROLE_ADMIN = "ROLE_ADMIN";
-    public static String ROLE_CUSTOMER = "ROLE_CUSTOMER";
-    public static String ROLE_PRIVILEGED_CUSTOMER = "ROLE_PRIVILEGED_CUSTOMER";
-    public static String ROLE_SECRETARY = "ROLE_SECRETARY";
-    public static String ROLE_STOREKEEPER = "ROLE_STOREKEEPER";
-    public static String ROLE_FORWARDING_AGENT = "ROLE_FORWARDING_AGENT";
-    public static String ROLE_CUSTOMS_OFFICER = "ROLE_CUSTOMS_OFFICER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
+    public static final String ROLE_PRIVILEGED_CUSTOMER = "ROLE_PRIVILEGED_CUSTOMER";
+    public static final String ROLE_SECRETARY = "ROLE_SECRETARY";
+    public static final String ROLE_STOREKEEPER = "ROLE_STOREKEEPER";
+    public static final String ROLE_FORWARDING_AGENT = "ROLE_FORWARDING_AGENT";
+    public static final String ROLE_CUSTOMS_OFFICER = "ROLE_CUSTOMS_OFFICER";
 
 
     public Role setRole(String role) {
