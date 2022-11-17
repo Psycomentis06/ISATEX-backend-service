@@ -5,6 +5,7 @@ services:
     working_dir: /usr/src/application
     ports:
       - "8000:8000"
+      - "35729:35729"
     volumes:
       - ./:/usr/src/application
       - mvn_local_repo:/root/.m2
