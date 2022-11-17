@@ -65,12 +65,12 @@ public class SecurityConfig {
 
    @Bean
    PasswordEncoder passwordEncoder() {
-      return new BCryptPasswordEncoder();
+      return bCryptPasswordEncoder;
    }
 
    @Bean
    UserDetailsService userDetailsService() {
-      return new UserService();
+      return userService;
    }
 
 
