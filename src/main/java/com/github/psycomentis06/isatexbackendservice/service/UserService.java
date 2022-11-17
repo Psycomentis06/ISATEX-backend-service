@@ -27,8 +27,6 @@ public class UserService implements UserDetailsService {
     public void createUser(User user) {
 
     }
-    public void createCustomer(Customer customer) {}
-    public void customerToPrivilegedCustomer(Customer customer) {}
 
     //NOTE Can we switch between user types
     public void authenticate(String username, String password) {}
