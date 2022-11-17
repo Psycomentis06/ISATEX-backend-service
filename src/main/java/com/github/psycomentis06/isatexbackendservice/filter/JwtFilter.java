@@ -2,12 +2,12 @@ package com.github.psycomentis06.isatexbackendservice.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.psycomentis06.isatexbackendservice.entity.User;
-import com.github.psycomentis06.isatexbackendservice.form.LoginForm;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 import javax.servlet.FilterChain;
@@ -15,10 +15,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 
+@Component
 public class JwtFilter extends UsernamePasswordAuthenticationFilter {
+
     private final AuthenticationManager authenticationManager;
 
     public JwtFilter(AuthenticationManager authenticationManager) {
@@ -30,18 +31,14 @@ public class JwtFilter extends UsernamePasswordAuthenticationFilter {
 
         ObjectMapper mapper = new ObjectMapper();
         try {
-            byte[] inputStreamBytes = request.getInputStream().readAllBytes();
-            /*Map<String, String> jsonRequest = mapper.readValue(inputStreamBytes, Map.class);
-            LoginForm loginForm = mapper.readValue(jsonRequest.get("body"), LoginForm.class);
-            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
-            return authenticationManager.authenticate(token);*/
             byte[] body = StreamUtils.copyToByteArray(request.getInputStream());
-            Map<String, Object> jsonRequest = new ObjectMapper().readValue(body, Map.class);
-            System.out.println(jsonRequest);
+            Map loginForm = mapper.readValue(body, Map.class);
+            System.out.println("Username: " + loginForm.get("username") + ", Password: " + loginForm.get("password"));
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginForm.get("username"), loginForm.get("password"));
+            return authenticationManager.authenticate(token);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return null;
     }
 
     @Override
