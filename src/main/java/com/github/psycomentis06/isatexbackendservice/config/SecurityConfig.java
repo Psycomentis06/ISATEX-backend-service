@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -32,6 +33,10 @@ public class SecurityConfig {
    RSAPrivateKey privateKey;
    private AuthenticationManager authenticationManager;
 
+   private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+   private UserService userService;
+
    @Bean
    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
       http.csrf()
@@ -46,9 +51,17 @@ public class SecurityConfig {
                   //.authenticated()
               .permitAll()
               .and()
-              .addFilter(new JwtFilter(authenticationManager));
+             .addFilter(new JwtFilter(authenticationManager));
       return http.build();
    }
+
+   /*@Bean
+   public DaoAuthenticationProvider daoAuthenticationProvider() {
+      DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+              provider.setUserDetailsService(userDetailsService());
+              provider.setPasswordEncoder(passwordEncoder());
+              return provider;
+   }*/
 
    @Bean
    PasswordEncoder passwordEncoder() {
@@ -58,5 +71,11 @@ public class SecurityConfig {
    @Bean
    UserDetailsService userDetailsService() {
       return new UserService();
+   }
+
+
+   @Bean
+   AuthenticationManager authenticationManagerBean(AuthenticationManagerBuilder managerBuilder) throws Exception {
+      return managerBuilder.getOrBuild();
    }
 }
