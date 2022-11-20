@@ -31,20 +31,22 @@ public class TokenService {
 
    public String generateAccessToken(Authentication authentication, String issuer) {
        Algorithm algorithm = Algorithm.RSA256(publicKey, privateKey);
-       return generateToken(authentication, issuer, algorithm);
+       Date duration = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
+       return generateToken(authentication, issuer, algorithm, duration);
    }
 
 
     public String generateRefreshToken(Authentication authentication, String issuer) {
         Algorithm algorithm = Algorithm.RSA256(refreshPublicKey, refreshPrivateKey);
-        return generateToken(authentication, issuer, algorithm);
+        Date duration = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
+        return generateToken(authentication, issuer, algorithm, duration);
     }
 
-   public String generateToken(Authentication authentication, String issuer, Algorithm algorithm) {
+   public String generateToken(Authentication authentication, String issuer, Algorithm algorithm, Date duration) {
        User user = (User) authentication.getPrincipal();
        return JWT.create()
                .withSubject(user.getUsername())
-               .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000))
+               .withExpiresAt(duration)
                .withIssuer(issuer)
                .withClaim("roles",
                        user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList())

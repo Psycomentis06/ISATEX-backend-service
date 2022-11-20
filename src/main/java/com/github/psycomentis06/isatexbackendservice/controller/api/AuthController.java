@@ -30,8 +30,8 @@ public class AuthController {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
          Authentication authentication = authenticationManager.authenticate(token);
         Map<String , String> resp = new HashMap<>();
-        resp.put("accessToken", tokenService.generateAccessToken(authentication, request.getRequestURI()));
-        resp.put("refreshToken", tokenService.generateRefreshToken(authentication, request.getRequestURI()));
+        resp.put("accessToken", tokenService.generateAccessToken(authentication, request.getRequestURL().toString()));
+        resp.put("refreshToken", tokenService.generateRefreshToken(authentication, request.getRequestURL().toString()));
         return new ResponseEntity<>(resp, null, HttpStatus.OK);
     }
 
