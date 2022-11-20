@@ -18,7 +18,6 @@ import java.io.IOException;
 public class CachedBodyHttpServletRequestFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("Cache filter");
         RequestWrapper requestWrapper = new RequestWrapper(request);
         filterChain.doFilter(requestWrapper, response);
     }
