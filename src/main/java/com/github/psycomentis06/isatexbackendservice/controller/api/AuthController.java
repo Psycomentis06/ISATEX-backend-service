@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,7 +29,10 @@ public class AuthController {
     public ResponseEntity<Object> authenticate(@RequestBody LoginForm loginForm, HttpServletRequest request) {
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(loginForm.getUsername(), loginForm.getPassword());
          Authentication authentication = authenticationManager.authenticate(token);
-        return new ResponseEntity<>(tokenService.generateAccessToken(authentication, request.getRequestURL().toString()), null, HttpStatus.OK);
+        Map<String , String> resp = new HashMap<>();
+        resp.put("accessToken", tokenService.generateAccessToken(authentication, request.getRequestURI()));
+        resp.put("refreshToken", tokenService.generateRefreshToken(authentication, request.getRequestURI()));
+        return new ResponseEntity<>(resp, null, HttpStatus.OK);
     }
 
 }
