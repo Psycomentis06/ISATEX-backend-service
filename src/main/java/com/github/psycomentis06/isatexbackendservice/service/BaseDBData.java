@@ -31,30 +31,35 @@ public class BaseDBData {
         roles.add(new Role(Role.ROLE_PRIVILEGED_CUSTOMER));
         roles.add(new Role(Role.ROLE_CUSTOMS_OFFICER));
 
-       roleRepository.saveAll(roles);
+        roleRepository.saveAll(roles);
     }
 
     @Transactional
     public void saveRequiredUser() {
-        User user = new User();
-        user
-                .setEmail("admin@isatex.tn")
-                .setPassword("123456789")
-                .setUsername("admin")
-                .setFirstName("admin")
-                .setLastName("admin");
+        Optional<User> userOptional = userService.getUser(User.class, "admin", null);
+        userOptional.ifPresentOrElse(null, () -> {
 
-        Optional<Role> adminRole = roleRepository.findById(Role.ROLE_ADMIN);
-        Role role;
-        if (adminRole.isEmpty()) {
-            role = roleRepository.save(new Role(Role.ROLE_ADMIN));
-        } else {
-            role = adminRole.get();
-        }
-        ArrayList<Role> roles = new ArrayList<>();
-        roles.add(role);
-        user.setRoles(roles);
+            User user = new User();
+            user
+                    .setEmail("admin@isatex.tn")
+                    .setPassword("123456789")
+                    .setVerified(true)
+                    .setUsername("admin")
+                    .setFirstName("admin")
+                    .setLastName("admin");
 
-        userService.createUser(user);
+            Optional<Role> adminRole = roleRepository.findById(Role.ROLE_ADMIN);
+            Role role;
+            if (adminRole.isEmpty()) {
+                role = roleRepository.save(new Role(Role.ROLE_ADMIN));
+            } else {
+                role = adminRole.get();
+            }
+            ArrayList<Role> roles = new ArrayList<>();
+            roles.add(role);
+            user.setRoles(roles);
+
+            userService.createUser(user);
+        });
     }
 }
