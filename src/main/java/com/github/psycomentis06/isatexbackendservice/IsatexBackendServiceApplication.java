@@ -23,7 +23,7 @@ public class IsatexBackendServiceApplication {
     CommandLineRunner defaultData() {
         return args -> {
             baseDBData.saveRequiredRoles();
-            baseDBData.saveRequiredUser();
+            //baseDBData.saveRequiredUser();
         };
     }
 }
