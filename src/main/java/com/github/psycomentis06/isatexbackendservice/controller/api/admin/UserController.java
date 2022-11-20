@@ -1,5 +1,7 @@
 package com.github.psycomentis06.isatexbackendservice.controller.api.admin;
 
+import com.github.psycomentis06.isatexbackendservice.entity.Customer;
+import com.github.psycomentis06.isatexbackendservice.entity.User;
 import com.github.psycomentis06.isatexbackendservice.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +17,20 @@ public class UserController {
     }
 
     @PostMapping("/create")
+    public ResponseEntity<Object> createUser(
+            @RequestBody User user
+            ) {
+        userService.createUser(user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
+    @PostMapping("/customer/create")
+    public ResponseEntity<Object> createCustomer(
+            @RequestBody Customer customer
+            ) {
+        userService.createCustomer(customer, true);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     @GetMapping("/all")
     public ResponseEntity<Object> all() {
         return new ResponseEntity<>(userService.allUsers(), null, HttpStatus.OK);

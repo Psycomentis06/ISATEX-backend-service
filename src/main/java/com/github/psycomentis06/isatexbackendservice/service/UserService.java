@@ -38,7 +38,10 @@ public class UserService {
     }
 
     public void createCustomer(Customer customer) {
-        customer.setVerified(false);
+        createCustomer(customer, false);
+    }
+    public void createCustomer(Customer customer, boolean verified) {
+        customer.setVerified(verified);
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
         ArrayList<Role> roles = new ArrayList<>();
         Optional<Role> role = roleRepository.findById(Role.ROLE_CUSTOMER);
