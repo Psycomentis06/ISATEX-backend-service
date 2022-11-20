@@ -15,11 +15,9 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 public class Role {
     @Id
-    @GeneratedValue
-    private int id;
-
     private String name;
 
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
