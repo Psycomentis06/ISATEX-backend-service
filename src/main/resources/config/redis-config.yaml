@@ -1,0 +1,2 @@
+expiration:
+  password-reset-token: 600 # 15 min
