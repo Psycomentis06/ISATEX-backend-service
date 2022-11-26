@@ -1,6 +1,7 @@
 package com.github.psycomentis06.isatexbackendservice.controller.api;
 
 import com.github.psycomentis06.isatexbackendservice.entity.User;
+import com.github.psycomentis06.isatexbackendservice.exception.UsernameNotFoundException;
 import com.github.psycomentis06.isatexbackendservice.form.EmailForm;
 import com.github.psycomentis06.isatexbackendservice.form.LoginForm;
 import com.github.psycomentis06.isatexbackendservice.service.EmailService;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -75,7 +75,7 @@ public class AuthController {
             emailService.sendEmail(emailForm);
             redisService.setUserResetPasswordToken(Integer.toString(u.getId()), token);
         }, () -> {
-            throw new UsernameNotFoundException("User not found");
+            throw new UsernameNotFoundException("User not found", 404);
         });
         Map<String, String> resp = new HashMap<>();
         resp.put("message", "Reset password request sent to given Email");

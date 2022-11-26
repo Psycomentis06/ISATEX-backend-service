@@ -1,11 +1,11 @@
 package com.github.psycomentis06.isatexbackendservice.service;
 
 import com.github.psycomentis06.isatexbackendservice.entity.User;
+import com.github.psycomentis06.isatexbackendservice.exception.UsernameNotFoundException;
 import com.github.psycomentis06.isatexbackendservice.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<User> userOptional = userRepository.findUserByUsernameOrEmail(User.class, username, username);
         User user = userOptional.orElseThrow(
-                () -> new UsernameNotFoundException("User Not Found")
+                () -> new UsernameNotFoundException("User Not Found", 404)
         );
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
