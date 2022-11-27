@@ -44,14 +44,14 @@ public class UserController {
     @GetMapping("/all")
     public ResponseEntity<Object> getAll(
             @RequestParam(name = "s", required = false, defaultValue = "10") int s,
-            @RequestParam(name = "p", required = false, defaultValue = "1") int p
+            @RequestParam(name = "p", required = false, defaultValue = "0") int p
     ) {
         Pageable pageable = Pageable.ofSize(s);
         pageable.withPage(p);
-        return new ResponseEntity<>(userService.getAll(pageable, User.class), null, HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAll(pageable), null, HttpStatus.OK);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Object> getById(
             @PathVariable int id
     ) {
