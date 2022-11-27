@@ -4,6 +4,7 @@ import com.github.psycomentis06.isatexbackendservice.entity.User;
 import com.github.psycomentis06.isatexbackendservice.exception.UsernameNotFoundException;
 import com.github.psycomentis06.isatexbackendservice.form.EmailForm;
 import com.github.psycomentis06.isatexbackendservice.form.LoginForm;
+import com.github.psycomentis06.isatexbackendservice.form.UsernameForm;
 import com.github.psycomentis06.isatexbackendservice.service.EmailService;
 import com.github.psycomentis06.isatexbackendservice.service.RedisService;
 import com.github.psycomentis06.isatexbackendservice.service.TokenService;
@@ -58,16 +59,16 @@ public class AuthController {
 
     @PostMapping("/password/reset/request")
     public ResponseEntity<Object> sendResetRequest(
-            @RequestBody String email
+            @RequestBody UsernameForm username
     ) {
-        Optional<User> user = userService.getUser(User.class, "", email);
+        Optional<User> user = userService.getUserByUsernameOrPassword(User.class, username.getUsername());
         user.ifPresentOrElse(u -> {
             String token = UUID.randomUUID().toString();
             EmailForm emailForm = new EmailForm();
             String resetUrl = resetPasswordUrl + "?id=" + u.getId() + "&token=" + token;
             emailForm
                     .setSubject("Reset Password")
-                    .setRecipient(email)
+                    .setRecipient(username.getUsername())
                     .setMessageBody(
                             "Reset password link:" +
                                     resetUrl
