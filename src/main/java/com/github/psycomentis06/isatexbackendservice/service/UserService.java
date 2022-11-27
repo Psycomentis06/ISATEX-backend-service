@@ -8,6 +8,8 @@ import com.github.psycomentis06.isatexbackendservice.exception.UsernameNotFoundE
 import com.github.psycomentis06.isatexbackendservice.repository.CustomerRepository;
 import com.github.psycomentis06.isatexbackendservice.repository.RoleRepository;
 import com.github.psycomentis06.isatexbackendservice.repository.UserRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -140,5 +142,9 @@ public class UserService {
         Optional<T> userOptional = userRepository.findByUsername(classType, value);
         if (userOptional.isPresent()) return userOptional;
         return userRepository.findByEmail(classType, value);
+    }
+
+    public <T> Page<T> getAll(Pageable pageable, Class<T> type) {
+        return userRepository.findAll(pageable, type);
     }
 }
