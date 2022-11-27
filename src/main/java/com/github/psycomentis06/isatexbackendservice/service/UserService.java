@@ -116,6 +116,7 @@ public class UserService {
                     user.ifPresentOrElse(u -> {
                         u.setPassword(newPass);
                         createUser(u);
+                        redisService.removeResetPasswordToken(String.valueOf(userId));
                     }, () -> {
                         throw new UsernameNotFoundException("Can't reset password. Given user is not found", HttpStatus.BAD_REQUEST.value());
                     });
