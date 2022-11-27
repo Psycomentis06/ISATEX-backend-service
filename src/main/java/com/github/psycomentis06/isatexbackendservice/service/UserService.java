@@ -92,10 +92,6 @@ public class UserService {
 
     @Transactional
     public void resetPassword(int userId, String newPass, String newPassRetype, String token) {
-        System.out.println("userId=" + userId);
-        System.out.println("newPass=" + newPass);
-        System.out.println("newPassRetype=" + newPassRetype);
-        System.out.println("token=" + token);
         List<String> constraints = new ArrayList<>();
         if (newPass == null) {
            constraints.add("New password is missing");
