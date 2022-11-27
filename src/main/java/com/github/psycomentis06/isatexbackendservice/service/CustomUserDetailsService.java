@@ -14,23 +14,32 @@ import java.util.Optional;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    UserRepository userRepository;
 
-    CustomUserDetailsService (UserRepository userRepository) {
+    private final UserRepository userRepository;
+
+    CustomUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOptional = userRepository.findUserByUsernameOrEmail(User.class, username, username);
+        Optional<User> userOptional = getUserByUsernameOrPassword(username);
         User user = userOptional.orElseThrow(
                 () -> new UsernameNotFoundException("User Not Found", 404)
         );
 
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(
-                role -> { authorities.add(new SimpleGrantedAuthority(role.getName()));}
+                role -> { authorities.add(new SimpleGrantedAuthority(role.getName()));
+                }
         );
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),authorities);
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+    }
+
+    public Optional<User> getUserByUsernameOrPassword(String value) {
+        Optional<User> userOptional = userRepository.findByUsername(User.class, value);
+        if (userOptional.isPresent()) return userOptional;
+        userOptional = userRepository.findByEmail(User.class, value);
+        return userOptional;
     }
 }
