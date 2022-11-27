@@ -37,9 +37,6 @@ public class AuthController {
 
     private final EmailService emailService;
 
-    @Value("${app.auth.reset-password-url}")
-    private String resetPasswordUrl;
-
     public AuthController(AuthenticationManager authenticationManager, TokenService tokenService, RedisService redisService, UserService userService, EmailService emailService) {
         this.authenticationManager = authenticationManager;
         this.tokenService = tokenService;
@@ -60,12 +57,14 @@ public class AuthController {
 
     @PostMapping("/password/reset/request")
     public ResponseEntity<Object> sendResetRequest(
-            @RequestBody UsernameForm username
+            @RequestBody UsernameForm username,
+            HttpServletRequest request
     ) {
         Optional<User> user = userService.getUserByUsernameOrPassword(User.class, username.getUsername());
         user.ifPresentOrElse(u -> {
             String token = UUID.randomUUID().toString();
             EmailForm emailForm = new EmailForm();
+            String resetPasswordUrl = request.getRemoteHost() + ":" + request.getRemotePort();
             String resetUrl = resetPasswordUrl + "?id=" + u.getId() + "&token=" + token;
             emailForm
                     .setSubject("Reset Password")
