@@ -19,10 +19,10 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
 
-    private final CustomUserDetailsService userService;
+    private final CustomUserDetailsService customUserDetailsService;
 
     public SecurityConfig(CustomUserDetailsService customUserDetailsService) {
-        this.userService = customUserDetailsService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
 
@@ -41,7 +41,7 @@ public class SecurityConfig {
 
     @Bean
     UserDetailsService userDetailsService() {
-        return userService;
+        return customUserDetailsService;
     }
 
     @Bean
