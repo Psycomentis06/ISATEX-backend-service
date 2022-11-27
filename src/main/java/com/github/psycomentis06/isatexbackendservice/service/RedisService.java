@@ -26,4 +26,8 @@ public class RedisService {
     public String getResetPasswordToken(String userId) {
         return (String) redisTemplate.opsForValue().get(getRestPasswordTokenKey(userId));
     }
+
+    public void removeResetPasswordToken(String userId) {
+        redisTemplate.opsForValue().getAndDelete()
+    }
 }
