@@ -4,6 +4,7 @@ import com.github.psycomentis06.isatexbackendservice.entity.User;
 import com.github.psycomentis06.isatexbackendservice.exception.UsernameNotFoundException;
 import com.github.psycomentis06.isatexbackendservice.form.EmailForm;
 import com.github.psycomentis06.isatexbackendservice.form.LoginForm;
+import com.github.psycomentis06.isatexbackendservice.form.ResetPasswordForm;
 import com.github.psycomentis06.isatexbackendservice.form.UsernameForm;
 import com.github.psycomentis06.isatexbackendservice.service.EmailService;
 import com.github.psycomentis06.isatexbackendservice.service.RedisService;
@@ -85,10 +86,14 @@ public class AuthController {
 
     @PostMapping("/password/reset")
     public ResponseEntity<Object> resetPassword(
-            @RequestParam(name = "id", defaultValue = "", required = true) String email,
-            @RequestParam(name = "token", defaultValue = "", required = true) String token
+            @RequestParam(name = "id", defaultValue = "", required = true) String userId,
+            @RequestParam(name = "token", defaultValue = "", required = true) String token,
+            @RequestBody ResetPasswordForm passwordForm
     ) {
-        return new ResponseEntity<>("res", null, HttpStatus.OK);
+        userService.resetPassword(Integer.parseInt(userId), passwordForm.getNewPassword(), passwordForm.getPasswordRetype(), token);
+        Map<String, String> resp = new HashMap<>();
+        resp.put("message", "Password updated successfully");
+        return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 
 }

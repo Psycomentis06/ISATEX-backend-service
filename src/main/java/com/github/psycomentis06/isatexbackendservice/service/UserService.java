@@ -4,14 +4,18 @@ import com.github.psycomentis06.isatexbackendservice.entity.Customer;
 import com.github.psycomentis06.isatexbackendservice.entity.Role;
 import com.github.psycomentis06.isatexbackendservice.entity.User;
 import com.github.psycomentis06.isatexbackendservice.exception.InvalidPasswordException;
+import com.github.psycomentis06.isatexbackendservice.exception.UsernameNotFoundException;
 import com.github.psycomentis06.isatexbackendservice.repository.CustomerRepository;
 import com.github.psycomentis06.isatexbackendservice.repository.RoleRepository;
 import com.github.psycomentis06.isatexbackendservice.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -23,12 +27,15 @@ public class UserService {
 
     private final CustomerRepository customerRepository;
 
-    UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, CustomerRepository customerRepository) {
+    private final RedisService redisService;
+
+    UserService(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder, CustomerRepository customerRepository, RedisService redisService) {
         this.userRepository = userRepository;
 
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
         this.customerRepository = customerRepository;
+        this.redisService = redisService;
     }
 
     public void createUser(User user) {
@@ -83,7 +90,41 @@ public class UserService {
     public void sendVerificationKey(String email) {
     }
 
-    public void resetPassword(int userId, String newPass, String newPassRetype) {
+    @Transactional
+    public void resetPassword(int userId, String newPass, String newPassRetype, String token) {
+        System.out.println("userId=" + userId);
+        System.out.println("newPass=" + newPass);
+        System.out.println("newPassRetype=" + newPassRetype);
+        System.out.println("token=" + token);
+        List<String> constraints = new ArrayList<>();
+        if (newPass == null) {
+           constraints.add("New password is missing");
+        } else if (newPassRetype == null){
+            constraints.add("Password retype is missing");
+        } else {
+            if (!newPass.equals(newPassRetype)) {
+                constraints.add("Password and Retype password does not match");
+            }
+            String savedToken = redisService.getResetPasswordToken(String.valueOf(userId));
+            if (savedToken == null) {
+                constraints.add("Request link expired try again");
+            } else {
+                if (!savedToken.equals(token)) {
+                    constraints.add("Given token does not match the token sent to your Email ");
+                } else {
+                    Optional<User> user = getUser(userId);
+                    user.ifPresentOrElse(u -> {
+                        u.setPassword(newPass);
+                        createUser(u);
+                    }, () -> {
+                        throw new UsernameNotFoundException("Can't reset password. Given user is not found", HttpStatus.BAD_REQUEST.value());
+                    });
+                }
+            }
+        }
+        if (constraints.size() > 0) {
+            throw new InvalidPasswordException("Reset password failed", HttpStatus.BAD_REQUEST.value(), constraints);
+        }
     }
 
     public List<User> allUsers() {
