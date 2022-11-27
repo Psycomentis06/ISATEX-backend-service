@@ -28,6 +28,6 @@ public class RedisService {
     }
 
     public void removeResetPasswordToken(String userId) {
-        redisTemplate.opsForValue().getAndDelete()
+        redisTemplate.opsForValue().getAndDelete(getResetPasswordToken(userId));
     }
 }
