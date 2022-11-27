@@ -144,7 +144,7 @@ public class UserService {
         return userRepository.findByEmail(classType, value);
     }
 
-    public <T> Page<T> getAll(Pageable pageable, Class<T> type) {
-        return userRepository.findAll(pageable, type);
+    public Page<User> getAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }
