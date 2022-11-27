@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "user_type" , discriminatorType = DiscriminatorType.INTEGER)
+@DiscriminatorColumn(name = "user_type", discriminatorType = DiscriminatorType.INTEGER)
 @Entity
 @Accessors(chain = true)
 @NoArgsConstructor
@@ -34,7 +33,7 @@ public class User {
     private String username;
 
     @NotBlank(message = "Password is required")
-    @Length(min = 6, max = 16, message = "Password length should be greater than 6 and less than 16")
+    @Length(max = 255)
     private String password;
 
     @NotBlank(message = "Email is required")
@@ -46,6 +45,7 @@ public class User {
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
+
     public User addRole(Role role) {
         roles.add(role);
         return this;
