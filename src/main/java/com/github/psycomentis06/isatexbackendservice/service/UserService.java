@@ -70,7 +70,7 @@ public class UserService {
         return userRepository.findById(id);
     }
 
-    public <T> Optional<T> getUser(Class<T>  classType, String username, String email) {
+    public <T> Optional<T> getUser(Class<T> classType, String username, String email) {
         return userRepository.findUserByUsernameOrEmail(classType, username, email);
     }
 }
