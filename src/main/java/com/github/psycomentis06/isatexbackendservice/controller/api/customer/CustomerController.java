@@ -1,4 +1,4 @@
-package com.github.psycomentis06.isatexbackendservice.controller.api.user;
+package com.github.psycomentis06.isatexbackendservice.controller.api.customer;
 
 import com.github.psycomentis06.isatexbackendservice.entity.Customer;
 import com.github.psycomentis06.isatexbackendservice.service.UserService;
@@ -6,15 +6,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("userUserController")
+import javax.validation.Validator;
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
 @RequestMapping("/api/user")
-public class UserController {
+public class CustomerController {
 
     private final UserService userService;
 
+    private final Validator validator;
 
-    public UserController(UserService userService) {
+
+    public CustomerController(UserService userService, Validator validator) {
         this.userService = userService;
+        this.validator = validator;
     }
 
     @PostMapping("/create")
@@ -22,6 +29,9 @@ public class UserController {
             @RequestBody Customer customer
     ) {
         userService.createCustomer(customer);
-        return new ResponseEntity<>("create", null, HttpStatus.OK);
+        Map<String, String> resp = new HashMap<>();
+        resp.put("code", "200");
+        resp.put("message", "Customer created successfully");
+        return new ResponseEntity<>(resp, null, HttpStatus.OK);
     }
 }
