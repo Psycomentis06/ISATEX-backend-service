@@ -36,8 +36,8 @@ public class BaseDBData {
 
     @Transactional
     public void saveRequiredUser() {
-        Optional<User> userOptional = userService.getUser(User.class, "admin", null);
-        userOptional.ifPresentOrElse(null, () -> {
+        Optional<User> userOptional = userService.getUserByUsernameOrPassword(User.class, "admin");
+        userOptional.ifPresentOrElse(u -> {}, () -> {
 
             User user = new User();
             user
