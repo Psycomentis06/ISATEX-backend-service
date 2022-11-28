@@ -7,22 +7,27 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Accessors(chain = true)
-public class Product {
+public class ProductCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     private String name;
 
-    private String composition;
-
     @ManyToOne(targetEntity = ProductCategory.class)
-    private ProductCategory category;
+    private ProductCategory parent;
+
+    @OneToMany(targetEntity = ProductCategory.class, mappedBy = "parent")
+    private List<ProductCategory> categories;
+
+    @OneToMany(targetEntity = Product.class, mappedBy = "category")
+    private List<Product> products;
 }
