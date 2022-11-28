@@ -149,7 +149,7 @@ public class UserService {
     }
 
     public <T>Page<T> getAll(Class<T> tClass, Pageable pageable, String query) {
-        query = "% " + query + " %";
+        query = "%" + query + "%";
       return userRepository.findUsersByUsernameLikeOrEmailLikeOrFirstNameLikeOrLastNameLike(tClass, query, query, query, query, pageable);
     }
 }

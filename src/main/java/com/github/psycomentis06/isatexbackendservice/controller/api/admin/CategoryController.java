@@ -53,7 +53,7 @@ public class CategoryController {
             @RequestParam(name = "q", required = false, defaultValue = "") String query
 
     ) {
-        query = "% " + query + " %";
+        query = "%" + query + "%";
         Pageable pageable = Pageable.ofSize(size);
         return new ResponseEntity<>(categoryRepository.findProductCategoriesByNameLikeIgnoreCase(query, pageable.withPage(page), ProductCategory.class), HttpStatus.OK);
     }
