@@ -2,6 +2,7 @@ package com.github.psycomentis06.isatexbackendservice.controller.api.admin;
 
 import com.github.psycomentis06.isatexbackendservice.entity.ProductCategory;
 import com.github.psycomentis06.isatexbackendservice.projection.SimpleProductCategory;
+import com.github.psycomentis06.isatexbackendservice.projection.SimpleProductCategoryWithCategories;
 import com.github.psycomentis06.isatexbackendservice.repository.ProductCategoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -37,10 +38,10 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SimpleProductCategory> getCategory(
+    public ResponseEntity<SimpleProductCategoryWithCategories> getCategory(
             @PathVariable int id
     ) {
-        Optional<SimpleProductCategory> categoryOptional = categoryRepository.findById(SimpleProductCategory.class, id);
+        Optional<SimpleProductCategoryWithCategories> categoryOptional = categoryRepository.findById(SimpleProductCategoryWithCategories.class, id);
         categoryOptional.orElseThrow(() -> {
             throw new EntityNotFoundException("Category #" + id + " not found");
         });
@@ -51,7 +52,7 @@ public class CategoryController {
     // TODO: update category
 
     @GetMapping("/all")
-    public ResponseEntity<Page<SimpleProductCategory>> getAll(
+    public ResponseEntity<Page<SimpleProductCategoryWithCategories>> getAll(
             @RequestParam(name = "s", required = false, defaultValue = "10") int size,
             @RequestParam(name = "p", required = false, defaultValue = "0") int page,
             @RequestParam(name = "q", required = false, defaultValue = "") String query
@@ -59,6 +60,6 @@ public class CategoryController {
     ) {
         query = "%" + query + "%";
         Pageable pageable = Pageable.ofSize(size);
-        return new ResponseEntity<>(categoryRepository.findProductCategoriesByNameLikeIgnoreCase(query, pageable.withPage(page), SimpleProductCategory.class), HttpStatus.OK);
+        return new ResponseEntity<>(categoryRepository.findProductCategoriesByNameLikeIgnoreCase(query, pageable.withPage(page), SimpleProductCategoryWithCategories.class), HttpStatus.OK);
     }
 }
