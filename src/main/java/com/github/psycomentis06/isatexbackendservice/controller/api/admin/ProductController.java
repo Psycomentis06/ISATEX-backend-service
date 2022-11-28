@@ -24,6 +24,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+    // TODO: check if category exists
     @PostMapping("/create")
     public ResponseEntity<Map<String , String >> createProduct(
             @RequestBody Product product
@@ -56,4 +57,6 @@ public class ProductController {
         Pageable pageable = Pageable.ofSize(size);
         return new ResponseEntity<>(productService.getAll(SimpleProductProjection.class, query, pageable.withPage(page)), HttpStatus.OK);
     }
+
+    // TODO: update
 }
