@@ -1,7 +1,6 @@
 package com.github.psycomentis06.isatexbackendservice.exception;
 
 import java.util.List;
-import java.util.Map;
 
 public class InvalidPasswordException extends RuntimeException{
     private int code;

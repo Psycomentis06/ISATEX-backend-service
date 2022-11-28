@@ -3,7 +3,6 @@ package com.github.psycomentis06.isatexbackendservice.service;
 import com.github.psycomentis06.isatexbackendservice.entity.Role;
 import com.github.psycomentis06.isatexbackendservice.entity.User;
 import com.github.psycomentis06.isatexbackendservice.repository.RoleRepository;
-import com.github.psycomentis06.isatexbackendservice.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

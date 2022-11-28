@@ -1,6 +1,8 @@
 package com.github.psycomentis06.isatexbackendservice.form;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Map;
 

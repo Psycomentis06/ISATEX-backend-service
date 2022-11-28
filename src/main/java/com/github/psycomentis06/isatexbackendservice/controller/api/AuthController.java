@@ -10,7 +10,6 @@ import com.github.psycomentis06.isatexbackendservice.service.EmailService;
 import com.github.psycomentis06.isatexbackendservice.service.RedisService;
 import com.github.psycomentis06.isatexbackendservice.service.TokenService;
 import com.github.psycomentis06.isatexbackendservice.service.UserService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
