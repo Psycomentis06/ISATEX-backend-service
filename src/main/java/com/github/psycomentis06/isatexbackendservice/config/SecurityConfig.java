@@ -13,10 +13,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig {
+public class SecurityConfig implements WebMvcConfigurer {
 
 
     private final CustomUserDetailsService customUserDetailsService;
@@ -49,8 +51,8 @@ public class SecurityConfig {
         http.csrf()
                 .disable()
                 .cors()
-                .and()
-                .sessionManagement()
+                .disable();
+        http.sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
@@ -58,5 +60,12 @@ public class SecurityConfig {
                 //.authenticated()
                 .permitAll();
         return http.build();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+       registry.addMapping("/**")
+               .allowedOrigins("*")
+               .allowedOriginPatterns("*");
     }
 }
