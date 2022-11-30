@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     <T> Optional<T> findByEmail(Class<T> projectionType, String Email);
 
+    <T> Optional<T> findById(Class<T> projectionType, int id);
+
     <T> Page<T> findUsersByUsernameLikeOrEmailLikeOrFirstNameLikeOrLastNameLike(Class<T> classType, String username, String email, String firstName, String lastName, Pageable pageable);
 
 }

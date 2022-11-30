@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -132,6 +133,10 @@ public class UserService {
 
     public Optional<User> getUser(int id) {
         return userRepository.findById(id);
+    }
+
+    public <T> Optional<T> getById(Class<T> tClass, int id) {
+        return userRepository.findById(tClass, id);
     }
 
     public <T> Optional<T> getUser(Class<T> classType, String username, String email) {
