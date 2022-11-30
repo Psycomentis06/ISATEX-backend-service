@@ -46,6 +46,8 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
+    private String image;
+
     public User addRole(Role role) {
         roles.add(role);
         return this;
