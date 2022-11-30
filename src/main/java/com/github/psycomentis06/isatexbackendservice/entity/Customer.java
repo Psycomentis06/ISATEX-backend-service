@@ -11,7 +11,10 @@ import javax.persistence.Entity;
 @Setter
 @NoArgsConstructor
 public class Customer extends User {
-    String city;
-    String address;
-    String country;
+    private String city;
+    private String address;
+    private String country;
+    private String enterpriseName;
+    private String enterpriseAddress;
+    private String enterpriseTelephone;
 }

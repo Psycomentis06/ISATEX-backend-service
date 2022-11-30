@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import org.hibernate.annotations.CollectionType;
 
 import javax.persistence.*;
 
@@ -22,6 +23,8 @@ public class Product {
     private String name;
 
     private String composition;
+
+    private String images;
 
     @ManyToOne(targetEntity = ProductCategory.class)
     private ProductCategory category;
