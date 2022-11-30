@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -75,8 +74,6 @@ public class UserService {
         checkPassword(customer.getPassword());
         customer.setVerified(verified);
         customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-        System.out.println("PLength=" + customer.getPassword().length());
-        System.out.println(customer.getPassword());
         ArrayList<Role> roles = new ArrayList<>();
         Optional<Role> role = roleRepository.findById(Role.ROLE_CUSTOMER);
         role.ifPresent(r -> {
@@ -97,8 +94,8 @@ public class UserService {
     public void resetPassword(int userId, String newPass, String newPassRetype, String token) {
         List<String> constraints = new ArrayList<>();
         if (newPass == null) {
-           constraints.add("New password is missing");
-        } else if (newPassRetype == null){
+            constraints.add("New password is missing");
+        } else if (newPassRetype == null) {
             constraints.add("Password retype is missing");
         } else {
             if (!newPass.equals(newPassRetype)) {
@@ -135,6 +132,15 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public <T> Optional<T> getCustomerById(Class<T> tClass, int id) {
+        return customerRepository.findById(tClass, id);
+    }
+
+    public <T> Page<T> getAllCustomers(Class<T> tClass, Pageable pageable, String query) {
+        query = "%" + query + "%";
+        return customerRepository.findUsersByUsernameLikeOrEmailLikeOrFirstNameLikeOrLastNameLike(tClass, query, query, query, query, pageable);
+    }
+
     public <T> Optional<T> getById(Class<T> tClass, int id) {
         return userRepository.findById(tClass, id);
     }
@@ -153,8 +159,8 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public <T>Page<T> getAll(Class<T> tClass, Pageable pageable, String query) {
+    public <T> Page<T> getAll(Class<T> tClass, Pageable pageable, String query) {
         query = "%" + query + "%";
-      return userRepository.findUsersByUsernameLikeOrEmailLikeOrFirstNameLikeOrLastNameLike(tClass, query, query, query, query, pageable);
+        return userRepository.findUsersByUsernameLikeOrEmailLikeOrFirstNameLikeOrLastNameLike(tClass, query, query, query, query, pageable);
     }
 }
