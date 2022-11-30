@@ -1,8 +1,7 @@
 package com.github.psycomentis06.isatexbackendservice.controller.api.admin;
 
-import com.github.psycomentis06.isatexbackendservice.entity.Customer;
 import com.github.psycomentis06.isatexbackendservice.entity.User;
-import com.github.psycomentis06.isatexbackendservice.projection.SimpleCustomerProjection;
+import com.github.psycomentis06.isatexbackendservice.projection.SimpleUserProjection;
 import com.github.psycomentis06.isatexbackendservice.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,7 +26,7 @@ public class UserController {
     @PostMapping("/create")
     public ResponseEntity<Object> createUser(
             @RequestBody User user
-            ) {
+    ) {
         userService.createUser(user);
         Map<String, String> resp = new HashMap<>();
         resp.put("message", "User created successfully");
@@ -35,31 +34,21 @@ public class UserController {
         return new ResponseEntity<>(resp, HttpStatus.OK);
     }
 
-    @PostMapping("/customer/create")
-    public ResponseEntity<Object> createCustomer(
-            @RequestBody Customer customer
-            ) {
-        userService.createCustomer(customer, true);
-        Map<String, String> resp = new HashMap<>();
-        resp.put("message", "Customer created successfully");
-        resp.put("code", "200");
-        return new ResponseEntity<>(resp, HttpStatus.OK);
-    }
     @GetMapping("/all")
-    public ResponseEntity<Page<SimpleCustomerProjection>> getAll(
+    public ResponseEntity<Page<SimpleUserProjection>> getAll(
             @RequestParam(name = "s", required = false, defaultValue = "10") int s,
             @RequestParam(name = "p", required = false, defaultValue = "0") int p,
             @RequestParam(name = "q", required = false, defaultValue = "") String query
     ) {
         Pageable pageable = Pageable.ofSize(s);
-        return new ResponseEntity<>(userService.getAll(SimpleCustomerProjection.class, pageable.withPage(p), query), null, HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAll(SimpleUserProjection.class, pageable.withPage(p), query), null, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SimpleCustomerProjection> getById(
+    public ResponseEntity<SimpleUserProjection> getById(
             @PathVariable int id
     ) {
-        Optional<SimpleCustomerProjection> userOptional = userService.getById(SimpleCustomerProjection.class, id);
+        Optional<SimpleUserProjection> userOptional = userService.getById(SimpleUserProjection.class, id);
         userOptional.orElseThrow(() -> {
             throw new EntityNotFoundException("User #" + id + " not found");
         });
