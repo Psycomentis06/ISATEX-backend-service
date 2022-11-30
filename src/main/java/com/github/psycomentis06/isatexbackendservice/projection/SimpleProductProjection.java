@@ -4,5 +4,6 @@ public interface SimpleProductProjection {
     int getId();
     String getName();
     String getComposition();
+    String getImages();
     SimpleProductCategory getCategory();
 }
