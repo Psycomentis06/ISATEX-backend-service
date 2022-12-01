@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.Collection;
 
 @Entity
@@ -21,8 +18,9 @@ public class MachineBrand {
     @GeneratedValue
     private int id;
 
+    @Column(unique = true)
     private String name;
 
-    @OneToMany(targetEntity = Machine.class)
+    @OneToMany(targetEntity = Machine.class, mappedBy = "brand")
     private Collection<Machine> machines;
 }
