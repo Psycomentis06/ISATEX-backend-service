@@ -6,5 +6,5 @@ public interface SimpleCustomerProjection extends SimpleUserProjection {
     String getCountry();
     String getEnterpriseName();
     String getEnterpriseAddress();
-    String getEnterpriseTelephone();
+    String getEnterprisePhone();
 }

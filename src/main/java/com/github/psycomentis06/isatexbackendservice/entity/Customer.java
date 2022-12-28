@@ -16,5 +16,5 @@ public class Customer extends User {
     private String country;
     private String enterpriseName;
     private String enterpriseAddress;
-    private String enterpriseTelephone;
+    private String enterprisePhone;
 }
